@@ -1,16 +1,20 @@
 <?php
+
 /**
- * Plugin Name: Folder Display WP
- * Description: A simple WordPress plugin to display a taxonomy like a folder system using a shortcode.
- * Version: 1.0
- * Author: Daniel Reintanz
+ * Class FolderDisplayWp
+ *
+ * A class that provides functionality to display a taxonomy-based folder structure using a shortcode.
+ * The folder structure includes breadcrumbs for navigation and a hierarchical display of terms.
  */
-class FolderDisplayWp{
-    function __construct(){
+class FolderDisplayWp
+{
+    function __construct()
+    {
         add_shortcode('folder_display', array($this, 'render_folder_display'));
     }
-    
-    public function render_folder_display($atts){
+
+    public function render_folder_display($atts)
+    {
         $atts = shortcode_atts(array(
             'taxonomy' => 'category',
         ), $atts, 'folder_display');
@@ -31,7 +35,8 @@ class FolderDisplayWp{
             return '<p>No terms found.</p>';
         }
 
-        $output = '<ul class="folder-display">';
+        $output = '<ul class="folder-display" style="list-style: none; padding-left: 0;">';
+
 
         // Display breadcrumb if we're in a term
         if ($current_term) {
@@ -40,7 +45,7 @@ class FolderDisplayWp{
 
             // Add home/root level
             $output .= '<li class="folder-breadcrumb">';
-            $output .= '<a href="' . get_site_url() . '">' . __('Home') . '</a> / ';
+            $output .= '<a href="' . get_site_url() . "/document/" . '">Dokumente</a> / ';
 
             // Add ancestors
             foreach ($ancestors as $ancestor_id) {
@@ -50,7 +55,7 @@ class FolderDisplayWp{
             }
 
             // Add current term
-            $output .= '<span>' . esc_html($current_term->name) . '</span>';
+            $output .= '<span style="font-weight: bold;">' . esc_html($current_term->name) . '</span>';
             $output .= '</li>';
 
             // Get child terms of current term
@@ -73,6 +78,11 @@ class FolderDisplayWp{
 
         $output .= '</ul>';
         return $output;
+
+
     }
+
+
 }
+
 new FolderDisplayWp();
